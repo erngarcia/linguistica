@@ -49,12 +49,65 @@
 #############
 
 class Phone:
+    ##############n
+    # ATTRIBUTES #
+    ##############
+
+    ###########
+    # GETTERS #
+    ###########
+
+    ###########
+    # SETTERS #
+    ###########
+
+    #############
+    # FUNCTIONS #
+    #############
+
     pass
 
-class Rule:
+class FeatureRule:
+    # This class implements a small container of a Feature Rule. For example,
+    # +CONSONANTAL implies -SYLLABIC could be one of the rules.
+    # In this case, both the antecedent as the consequent are lists, as it might
+    # be the case there are several arguments on each of these part,
+
+    ##############n
+    # ATTRIBUTES #
+    ##############
+
+    ###########
+    # GETTERS #
+    ###########
+
+    ###########
+    # SETTERS #
+    ###########
+
+    #############
+    # FUNCTIONS #
+    #############
+
     pass
 
 class PhoneticSystem:
+    ##############n
+    # ATTRIBUTES #
+    ##############
+
+    ###########
+    # GETTERS #
+    ###########
+
+    ###########
+    # SETTERS #
+    ###########
+
+    #############
+    # FUNCTIONS #
+    #############
+
     pass
 
 #############
