@@ -39,6 +39,53 @@
 # implementation of a phonetic system necessary for a research project.
 
 
+acousticPhonetics = AbstractPhoneticSystem()
+
+
+acousticPhonetics.addPhone(
+    AbstractPhone(
+        {"HIGH": True,
+         "LOW":False,
+         "BACK":False,
+         "ROUND":False, 
+         "TENSE":True
+         },
+         {
+         ""
+         },
+         "i"
+
+    )
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ###############

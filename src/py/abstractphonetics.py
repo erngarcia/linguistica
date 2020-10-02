@@ -122,9 +122,26 @@
 ##                      ##
 ##########################
 ##########################
-
 class AbstractPhone:
-    # Description.
+    # This is the class AbstractPhone, that represents, in the most abstract way
+    # possible, a phone object as in acustic or articularoty phonetics, but also,
+    # if it is the case, phones in the sense of signs in sign language. Even so,
+    # if the need arises, it could be used to implement syllabaries.
+    #
+    # This class has three main attributes:
+    #
+    # - _features: This is a dictionary, where each key corresponds to a
+    #              predefined list of features, given globally by the phonetic
+    #              system, and the value is either True, False or None. None is
+    #              used only if the particular feature is not specified yet.
+    #
+    # - _name: This is also a dictionary. In this case, the key is the type of
+    #          name to include, for example, in articularoty phonetics, it could
+    #          be voicing, point of articulation, manner of articulation, etc.
+    #          The value is, the actual value of this particular, like voiced or
+    #          unvoiced, plossive, fricative, etc.
+    #
+    # -
 
     ##############
     # ATTRIBUTES #
@@ -208,11 +225,20 @@ class AbstractPhoneticSystem:
     ##############
     # ATTRIBUTES #
     ##############
+    _inventory = []
+    _rules     = []
+    _features  = []
+    _names     = []
 
 
     ############
     # CREATORS #
     ############
+    def __init__(self,featureArray,namingArray):
+        self.features = featureArray
+        self.names = namingArray
+
+
 
 
     ###########
@@ -227,7 +253,11 @@ class AbstractPhoneticSystem:
     ###########
     # METHODS #
     ###########
-    pass
+    def addPhone(phone):
+        pass
+
+    def addRule(self,rule):
+        pass
 
 
 
