@@ -141,7 +141,10 @@ class AbstractPhone:
     #          The value is, the actual value of this particular, like voiced or
     #          unvoiced, plossive, fricative, etc.
     #
-    # -
+    # - _symbol: This is a string, often consisting on a single character, that
+    #            identifies the phone in a unique manner. It could be the
+    #            IPA symbol, or the X-SAMPA.
+    #
 
     ##############
     # ATTRIBUTES #
@@ -156,6 +159,19 @@ class AbstractPhone:
     # CREATORS #
     ############
     def __init__(self,theFeatures,theName,theSymbol):
+        # This is a simple creator for the class AbstractPhone. Takes as
+        # arguments the following:
+        #
+        # - theFeatures: This is a dictionary in which the key is the respective
+        #                feature name, and the value is True or False, as it
+        #                corresponds.
+        #
+        # - theName: This is a dictionary in which the key is the naming
+        #            cathegory and the value is the corresponding name.
+        #
+        # - theSymbol: String that contains the single character or set of
+        #              characters that uniquely identifies the phone.
+        #
         self._symbol = theSymbol
         keys = theName.keys()
         for x in keys:
@@ -236,7 +252,7 @@ class AbstractPhoneticSystem:
     ############
     def __init__(self,featureArray,namingArray):
         self.features = featureArray
-        self.names = namingArray
+        self.names    = namingArray
 
 
 
