@@ -225,6 +225,10 @@ class AbstractPhone:
     ###########
     # METHODS #
     ###########
+    def isEmpty(self):
+        # This function returns True if phone has no attributes, name or symbol,
+        # it returns False otherwise.
+        pass
 
 
 ##############################
@@ -236,7 +240,12 @@ class AbstractPhone:
 ##############################
 
 class AbstractPhoneticSystem:
-    # Description.
+    # This class implements an Abstract Phonetic Systems. It is an object that
+    # contains four attributes: _inventory (list of AbstractPhone objects),
+    # _rules (list of FeatureRule objects), _features (list of strings of all
+    # the phonetic features' names), _names (list of strings of all the naming
+    # cathegories names). The attribute _names and _features should not change
+    # what so ever after the class has been instantiated.
 
     ##############
     # ATTRIBUTES #
@@ -269,10 +278,37 @@ class AbstractPhoneticSystem:
     ###########
     # METHODS #
     ###########
-    def addPhone(phone):
+    def addPhone(self,phone):
+        # This method adds a phone to the inventory of the phonetic system. It
+        # must make a check that the new phone does not contradict the rules
+        # contained to that point on the rule book.
         pass
 
     def addRule(self,rule):
+        # This method adds a rule to the rule book of the system. It is
+        # important to note that the new rule must be checked not to make the
+        # rule system inconsistent.
+        pass
+
+    def getMatches(self,conditions):
+        # This function receives a list of pairs, called "conditions", where
+        # each pair is either a feature name and feature vaule, or a naming
+        # cathegory and the corresponding name. It returns a list of all the
+        # phones in the phonetic system's inventory that satisfy all the
+        # conditions. For example, if the list of conditions is empty, then the
+        # funtion will return the entire inventory by vacuity.
+        #
+        # ARGUMENTS:
+        #
+        # - conditions: List. Its elements are pairs. For example, it could be
+        #               given by:
+        #               conditions = [["SYLLABIC", False], ["PHONATION","UNVOICED"]].
+        #
+        pass
+
+    def findPhoneBySymbol(self,symbol):
+        # This function returns the phone in the Phonetic System with the given
+        # symbol. If such phone does not exists, it returns an empty phone.
         pass
 
 
@@ -292,6 +328,8 @@ class FeatureRule:
     ##############
     # ATTRIBUTES #
     ##############
+    _antecedents = []
+    _consequents = []
 
 
     ############
@@ -311,7 +349,15 @@ class FeatureRule:
     ###########
     # METHODS #
     ###########
-    pass
+    def isConsistent(self,phone):
+        # This method takes an object of the class AbstractPhone, and checks if
+        # the phone is consistent with the current rule. This is, either not all
+        # the anticedents are satisfied, this is, the rule does not apply, or if
+        # all the antecedents are satisfied and all the consecuents are
+        # satisfied, this is, the rule is fulfilled, then, it returns True. If
+        # all the antecedents are satisfied, but not all the consequents are,
+        # then the rule is violated, and this method returns False.
+        pass
 
 
 ###############
