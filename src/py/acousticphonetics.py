@@ -38,16 +38,16 @@
 # This module contains the methods, classes and variables necessary for the
 # implementation of a phonetic system necessary for a research project.
 
-
+##hay un problema en la creacion del objeto.
 acousticPhonetics = AbstractPhoneticSystem()
 
-
+##objeto no instanciado.
 acousticPhonetics.addPhone(
     AbstractPhone(
         {"HIGH": True,
          "LOW":False,
          "BACK":False,
-         "ROUND":False, 
+         "ROUND":False,
          "TENSE":True
          },
          {
@@ -57,7 +57,70 @@ acousticPhonetics.addPhone(
 
     )
 )
+#TODO: resolver el tema de los +-, porque esta siendo un unicode char y no un bool
+# creo que tambien si los rasgos que identificaron Haakon y Viviana eran esos, hay algunos que van
+# a quedar vacios siempre en el codigo.
 
+consonants = {
+    "p": {"sonorante": False, "sonora": False, "nasal": False, "continua": False, "del rel": False, "lateral": False,
+          "LABIAL": True, "CORONAL": False, "DORSAL": False},
+    "b": {"sonorante": False, "sonora": True, "nasal": False, "continua": False, "del rel": False, "lateral": False,
+          "LABIAL": True, "CORONAL": False, "DORSAL": False},
+    "t": {"sonorante": False, "sonora": False, "nasal": False, "continua": False, "del rel": False, "lateral": False,
+          "LABIAL": False, "CORONAL": True, "DORSAL": False},
+    "d": {"sonorante": False, "sonora": True, "nasal": False, "continua": False, "del rel": False, "lateral": False,
+          "LABIAL": False, "CORONAL": True, "DORSAL": False},
+    "k": {"sonorante": False, "sonora": False, "nasal": False, "continua": False, "del rel": False, "lateral": False,
+          "LABIAL": False, "CORONAL": False, "DORSAL": True},
+    "g": {"sonorante": False, "sonora": True, "nasal": False, "continua": False, "del rel": False, "lateral": False,
+          "LABIAL": False, "CORONAL": False, "DORSAL": True},
+    "\"u0294": {"sonorante": False, "sonora": False, "nasal": False, "continua": False, "del rel": False,
+                "lateral": False, "LABIAL": False, "CORONAL": False, "DORSAL": False},
+    "\"u0278": {"sonorante": False, "sonora": False, "nasal": False, "continua": True, "del rel": False,
+                "lateral": False, "LABIAL": True, "CORONAL": False, "DORSAL": False},
+    "\"u03b2": {"sonorante": False, "sonora": True, "nasal": False, "continua": True, "del rel": False,
+                "lateral": False, "LABIAL": True, "CORONAL": False, "DORSAL": False},
+    "s": {"sonorante": False, "sonora": False, "nasal": False, "continua": True, "del rel": False, "lateral": False,
+          "LABIAL": False, "CORONAL": True, "DORSAL": False},
+    "z": {"sonorante": False, "sonora": True, "nasal": False, "continua": True, "del rel": False, "lateral": False,
+          "LABIAL": False, "CORONAL": True, "DORSAL": False},
+    "\"u026c": {"sonorante": False, "sonora": False, "nasal": False, "continua": True, "del rel": False,
+                "lateral": True, "LABIAL": False, "CORONAL": True, "DORSAL": False},
+    "\"u0283": {"sonorante": False, "sonora": False, "nasal": False, "continua": True, "del rel": False,
+                "lateral": False, "LABIAL": False, "CORONAL": True, "DORSAL": True},
+    "\"u0292": {"sonorante": False, "sonora": True, "nasal": False, "continua": True, "del rel": False,
+                "lateral": False, "LABIAL": False, "CORONAL": True, "DORSAL": True},
+    "x": {"sonorante": False, "sonora": False, "nasal": False, "continua": True, "del rel": False, "lateral": False,
+          "LABIAL": False, "CORONAL": False, "DORSAL": True},
+    "\"u0263": {"sonorante": False, "sonora": True, "nasal": False, "continua": True, "del rel": False,
+                "lateral": False, "LABIAL": False, "CORONAL": False, "DORSAL": True},
+    "h": {"sonorante": False, "sonora": False, "nasal": False, "continua": True, "del rel": False, "lateral": False,
+          "LABIAL": False, "CORONAL": False, "DORSAL": False},
+    "t\"u0361s": {"sonorante": False, "sonora": False, "nasal": False, "continua": False, "del rel": True,
+                  "lateral": False, "LABIAL": False, "CORONAL": True, "DORSAL": False},
+    """t"\"u0361"\"u0283""": {"sonorante": False, "sonora": False, "nasal": False, "continua": False, "del rel": True,
+                              "lateral": False, "LABIAL": False, "CORONAL": True, "DORSAL": True},
+    """d"\"u0361"\"u0292""": {"sonorante": False, "sonora": True, "nasal": False, "continua": False, "del rel": True,
+                              "lateral": False, "LABIAL": False, "CORONAL": True, "DORSAL": True},
+    "m": {"sonorante": True, "sonora": True, "nasal": True, "continua": False, "del rel": False, "lateral": False,
+          "LABIAL": True, "CORONAL": False, "DORSAL": False},
+    "n": {"sonorante": True, "sonora": True, "nasal": True, "continua": False, "del rel": False, "lateral": False,
+          "LABIAL": False, "CORONAL": True, "DORSAL": False},
+    """\"u0272""": {"sonorante": True, "sonora": True, "nasal": True, "continua": False, "del rel": False,
+                    "lateral": False, "LABIAL": False, "CORONAL": True, "DORSAL": True},
+    "\"u014b": {"sonorante": True, "sonora": True, "nasal": True, "continua": False, "del rel": False, "lateral": False,
+                "LABIAL": False, "CORONAL": False, "DORSAL": True},
+    """\"u027e""": {"sonorante": True, "sonora": True, "nasal": False, "continua": """\"u00b1""", "del rel": False,
+                    "lateral": False, "LABIAL": False, "CORONAL": True, "DORSAL": False},
+    "r": {"sonorante": True, "sonora": True, "nasal": False, "continua": True, "del rel": False, "lateral": False,
+          "LABIAL": False, "CORONAL": True, "DORSAL": False},
+    "l": {"sonorante": True, "sonora": True, "nasal": False, "continua": True, "del rel": False, "lateral": True,
+          "LABIAL": False, "CORONAL": True, "DORSAL": False},
+    """\"u027d" \/ \"u027a""": {"sonorante": True, "sonora": True, "nasal": False, "continua": "\"u00b1",
+                                "del rel": False, "lateral": "\"u00b1", "LABIAL": False, "CORONAL": True,
+                                "DORSAL": False}}
+
+vowels = {"i":{"cerrada":True,"abierta":False,"laxa":False,"posterior":False,"redondeada":False},"\u026f":{"cerrada":True,"abierta":False,"laxa":False,"posterior":True,"redondeada":False},"u":{"cerrada":True,"abierta":False,"laxa":False,"posterior":True,"redondeada":True},"\u026a":{"cerrada":True,"abierta":False,"laxa":True,"posterior":False,"redondeada":False},"\u028a":{"cerrada":True,"abierta":False,"laxa":True,"posterior":True,"redondeada":True},"e":{"cerrada":False,"abierta":False,"laxa":False,"posterior":False,"redondeada":False},"\u0264":{"cerrada":False,"abierta":False,"laxa":False,"posterior":True,"redondeada":False},"o":{"cerrada":False,"abierta":False,"laxa":False,"posterior":True,"redondeada":True},"a":{"cerrada":False,"abierta":True,"laxa":False,"posterior":"\u00b1","redondeada":False},"\u0254":{"cerrada":False,"abierta":True,"laxa":False,"posterior":True,"redondeada":True}}
 
 
 
