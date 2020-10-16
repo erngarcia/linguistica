@@ -273,7 +273,6 @@ class AbstractPhoneticSystem:
     _features  = []
     _names     = []
 
-
     ############
     # CREATORS #
     ############
@@ -331,6 +330,7 @@ class AbstractPhoneticSystem:
         k = 0
         flag = True
         thePhone = None
+
         while k < K and flag:
             s = self._inventory[k].getSymbol()
             if s == symbol:

@@ -92,7 +92,7 @@ class FeatureRule:
     pass
 
 class PhoneticSystem:
-    ##############n
+    ##############
     # ATTRIBUTES #
     ##############
 
@@ -128,8 +128,8 @@ class PhoneticSystem:
 ######################
 ######################
 
-NAME_DICT =
-    {
+#haakon y viviana no identificaron todos estos rasgos, entonces siempre tendremos espacios nulos si lo queremos usar para crear reglas
+NAME_DICT ={
         "PLACE_OF_ARTICULATION":
             [
                 "BILABIAL",
@@ -230,7 +230,7 @@ NAME_DICT =
             ]
     }
 
-
+#haakon y viviana no identificaron todos estos rasgos, entonces siempre tendremos espacios nulos
 FEATURES = [
         "SYLLABIC",
         "SONORANT",
