@@ -172,13 +172,17 @@ class AbstractPhone:
         # - theSymbol: String that contains the single character or set of
         #              characters that uniquely identifies the phone.
         #
-        self._symbol = theSymbol
-        keys = theName.keys()
-        for x in keys:
-            self._name[x] = theName[x]
-        keys = theFeatures.keys()
-        for x in keys:
-            self._features[x] = theFeatures[x]
+        if len(theSymbol) > 0:
+            self._symbol = theSymbol
+            keys = theName.keys()
+            for x in keys:
+                self._name[x] = theName[x]
+            keys = theFeatures.keys()
+            for x in keys:
+                self._features[x] = theFeatures[x]
+            return True
+        else:
+            return False
 
     ###########
     # GETTERS #
@@ -228,7 +232,21 @@ class AbstractPhone:
     def isEmpty(self):
         # This function returns True if phone has no attributes, name or symbol,
         # it returns False otherwise.
-        pass
+        L = 0
+        keys = self._features.keys()
+        for x in keys:
+            if self._features[x] != None:
+                L += 1
+        keys = self._names.keys()
+        for x in keys:
+            if self._names[x] != None:
+                L += 1
+        if len(self._symbol) == 0:
+            return True
+        elif L == 0:
+            return True
+        else:
+            return False
 
 
 ##############################
@@ -309,7 +327,21 @@ class AbstractPhoneticSystem:
     def findPhoneBySymbol(self,symbol):
         # This function returns the phone in the Phonetic System with the given
         # symbol. If such phone does not exists, it returns an empty phone.
-        pass
+        K = len(self._inventory)
+        k = 0
+        flag = True
+        thePhone = None
+        while k < K and flag:
+            s = self._inventory[k].getSymbol()
+            if s == symbol:
+                thePhone = self._inventory[k]
+                flag = False
+            else:
+                k += 1
+        if thePhone == None:
+            thePhone = AbstractPhone({},{},"")
+        return thePhone
+
 
 
 
