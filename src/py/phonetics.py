@@ -232,25 +232,25 @@ NAME_DICT ={
 
 #haakon y viviana no identificaron todos estos rasgos, entonces siempre tendremos espacios nulos
 FEATURES = [
-        "SYLLABIC",
-        "SONORANT",
-        "CONSONANTAL"
-        "HIGH",
-        "LOW",
-        "BACK",
-        "ROUND",
-        "TENSE",
-        "CORONAL",
         "ANTERIOR",
-        "STRIDENT",
-        "DISTRIBUTED",
-        "CONTINUANT",
-        "DELAYED_RELEASE",
-        "NASAL",
-        "LATERAL",
-        "SPREAD_GLOTTIS",
+        "BACK",
+        "CONSONANTAL"
         "CONSTRICTED_GLOTTIS",
-        "VOICE",
+        "CONTINUANT",
+        "CORONAL",
+        "DELAYED_RELEASE",
+        "DISTRIBUTED",
+        "HIGH",
+        "LATERAL",
         "LONG",
+        "LOW",
+        "NASAL",
+        "ROUND",
+        "SONORANT",
+        "SPREAD_GLOTTIS",
         "STRESS"
+        "STRIDENT",
+        "SYLLABIC",
+        "TENSE",
+        "VOICE",
     ]
