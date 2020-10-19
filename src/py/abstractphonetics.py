@@ -286,6 +286,17 @@ class AbstractPhoneticSystem:
     ###########
     # GETTERS #
     ###########
+    def getInventory(self):
+        return self._inventory
+
+    def getRules(self):
+        return self._rules
+
+    def getFeatureList(self):
+        return self._features
+
+    def getNamingList(self):
+        return self._names
 
 
     ###########
@@ -299,7 +310,17 @@ class AbstractPhoneticSystem:
         # This method adds a phone to the inventory of the phonetic system. It
         # must make a check that the new phone does not contradict the rules
         # contained to that point on the rule book.
-        pass
+        count = 0
+        for rule in self._rules:
+            flag = rule.isConsistent(phone)
+            if not flag:
+                count += 1
+        if count == 0:
+            self._inventory.append(phone)
+            flag = True
+        else:
+            flag = False
+        return flag
 
     def addRule(self,rule):
         # This method adds a rule to the rule book of the system. It is
@@ -321,7 +342,24 @@ class AbstractPhoneticSystem:
         #               given by:
         #               conditions = [["SYLLABIC", False], ["PHONATION","UNVOICED"]].
         #
-        pass
+        matches = []
+        for phone in self._inventory:
+            tempFlag = True
+            for condition in conditions:
+                key = condition[0]
+                if key in self._features:
+                    value = phone.getFeatureValue(key)
+                    if value != None and value != condition[1]:
+                        tempFlag = False
+                elif key in self._names:
+                    value = phone.getNameValue(key)
+                    if value != condition[1]:
+                        tempFlag = False
+                else:
+                    tempFlag = False
+            if tempFlag:
+                matches.append(phone)
+        return matches
 
     def findPhoneBySymbol(self,symbol):
         # This function returns the phone in the Phonetic System with the given
