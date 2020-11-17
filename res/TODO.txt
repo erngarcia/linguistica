@@ -1,0 +1,5 @@
+Hacer función que separe cada palabra en una lista de los fonemas respectivos.
+Hacer funcion que aplane la palabra. 
+Hacer función que de la distancia entre dos fonemas dados a partir de las características.
+Hacer función de distancia entre dos palabras.
+Hacer función maestra.
