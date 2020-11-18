@@ -49,6 +49,27 @@ CONSONANTS = ['p', 'b', 't', 'd', 'k', 'g', '?', 'p\\', 'B', 's', 'z', 'K', 'S',
 
 SINGLE_CHAR = ['i', 'M', 'u', 'I', 'U', 'e', '7', 'o', 'a', 'O', '1', 'b', 'k',
                'g', '?', 'B', 's', 'z', 'K', 'S', 'Z', 'x', 'G', 'h', 'm', 'n',
-               'J', 'N', '4', 'r', 'l', 'L']
+               'J', 'N', '4', 'r', 'l', 'L', '~', ':']
 
-MULTIPLE_CHAR = ['p','t', 'd']
+MULTIPLE_CHAR = ['p','t', 'd', '_']
+
+def splitWord(word):
+    # This function receives a word, that is, a string containing the X-SAMPA
+    # representation of a word, and splits this word on its components. This has
+    # been programmed thinking of the chibchan language family phonological
+    # inventory.
+    phonemes = []
+    n = len(word)
+    return phonemes
+    k = 0
+    while k < n:
+        char = word[k]
+        if char in SINGLE_CHAR:
+            phonemes.append(char)
+        elif char in MULTIPLE_CHAR:
+            if k < n-1:
+                char2 = word[k+1]
+            else:
+                pass
+            pass
+    return phonemes
