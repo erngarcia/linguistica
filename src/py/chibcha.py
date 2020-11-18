@@ -69,6 +69,19 @@ def splitWord(word):
         elif char in MULTIPLE_CHAR:
             if k < n-1:
                 char2 = word[k+1]
+                if char == 'p' and char2 == '\\':
+                    k += 1
+                    phonemes.append(char + char2)
+                elif char == 'p':
+                    phonemes.append(char)
+                elif char == 'd' and char2 == 'Z':
+                    k += 1
+                    phonemes.append(char + char2)
+                elif char == 'd':
+                    phonemes.append(char)
+                elif char == 't' and (char2 == 's' or char2 == 'S'):
+                    k += 1
+                    phonemes.append(char + char2)
             else:
                 pass
             pass
