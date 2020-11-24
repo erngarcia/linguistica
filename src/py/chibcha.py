@@ -53,7 +53,7 @@ SINGLE_CHAR = ['i', 'M', 'u', 'I', 'U', 'e', '7', 'o', 'a', 'O', '1', 'b', 'k',
 
 MULTIPLE_CHAR = ['p','t', 'd', '_']
 
-DIACRITC_CHAR = ['~',':',"\'","_"]
+DIACRITC_CHAR = ['~',':','\"','_']
 
 def splitWord(word):
     # This function receives a word, that is, a string containing the X-SAMPA
@@ -84,9 +84,25 @@ def splitWord(word):
                 elif char == 't' and (char2 == 's' or char2 == 'S'):
                     k += 1
                     phonemes.append(char + char2)
+                elif char == 't':
+                    phonemes.append(char)
+                elif char in DIACRITC_CHAR:
+                    if char2 == 'H' or char2 == 'L' or char2 == '/' or char2 == '\\':
+                        k += 1
+                        phonemes.append(char + char2)
+                    else:
+                        print(char)
+                        print('\n')
+                else:
+                    print(char)
+                    print('\n')
             else:
-                pass
-            pass
+                phonemes.append(char)
+        elif char == 'ñ':
+            phonemes.append('J')
+        else:
+            print(char)
+            print('\n')
     return phonemes
 
 def normalizeWord(word, diacritics):
@@ -97,4 +113,3 @@ def normalizeWord(word, diacritics):
         else:
             new_word = new_word+i
     return new_word
-
