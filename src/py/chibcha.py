@@ -62,7 +62,6 @@ def splitWord(word):
     # inventory.
     phonemes = []
     n = len(word)
-    return phonemes
     k = 0
     while k < n:
         char = word[k]
@@ -87,7 +86,7 @@ def splitWord(word):
                 elif char == 't':
                     phonemes.append(char)
                 elif char in DIACRITC_CHAR:
-                    if char2 == 'H' or char2 == 'L' or char2 == '/' or char2 == '\\':
+                    if char2 == 'H' or char2 == 'L' or char2 == '/' or char2 == '\"':
                         k += 1
                         phonemes.append(char + char2)
                     else:
@@ -103,6 +102,7 @@ def splitWord(word):
         else:
             print(char)
             print('\n')
+        k += 1
     return phonemes
 
 def normalizeWord(word, diacritics):
