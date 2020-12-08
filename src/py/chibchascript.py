@@ -1,6 +1,8 @@
-from pandas import read_excel
-from chibcha import *
+# from pandas import read_excel
 
+# Run the following
+from chibcha import *
+M = languageMatrix()
 
 
 # df_listas = read_excel("../../Resources/ListasSwadesh.xlsx", sheet_name="Hoja1")
