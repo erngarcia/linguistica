@@ -42,12 +42,20 @@ import pandas as pd
 import numpy as np
 import math
 
+import pdb
 
-VOCALS = ['i', 'M', 'u', 'I', 'U', 'e', '7', 'o', 'a', 'O', '1']
 
-CONSONANTS = ['p', 'b', 't', 'd', 'k', 'g', '?', 'p\\', 'B', 's', 'z', 'K', 'S',
-              'Z', 'x', 'G', 'h', 'ts',	'tS', 'dZ', 'm', 'n', 'J', 'N', '4',
-              'r', 'l', 'L']
+VOCALS = ['i', '1', 'u', 'I', 'U', 'e', '7', 'o', 'a', 'O']
+# VOCALS = ['i', 'M', 'u', 'I', 'U', 'e', '7', 'o', 'a', 'O', '1']
+
+CONSONANTS = ['p', 'b', 't', 'd', 'k', 'g', '?', 'F', 'B', 's',
+              'z', 'K', 'S', 'Z', 'x', 'G', 'h', 'T', 'C', 'J',
+              'm', 'n', 'ñ', 'N', 'r', 'R', 'l', 'L']
+
+# CONSONANTS = ['p', 'b', 't', 'd', 'k', 'g', '?', 'p\\', 'B', 's', 'z', 'K', 'S',
+#               'Z', 'x', 'G', 'h', 'ts',	'tS', 'dZ', 'm', 'n', 'J', 'N', '4',
+#               'r', 'l', 'L']
+
 
 SINGLE_CHAR = ['i', 'M', 'u', 'I', 'U', 'e', '7', 'o', 'a', 'O', '1', 'b', 'k',
                'g', '?', 'B', 's', 'z', 'K', 'S', 'Z', 'x', 'G', 'h', 'm', 'n',
@@ -109,6 +117,8 @@ def prepareFeatures():
         output_features = []
         for n in range(len(phoneme_features)):
             output_features.append(phoneme_features[n])
+        if type(phoneme_name) == int:
+            phoneme_name = str(phoneme_name)
         vowels[phoneme_name] = output_features
         k += 1
     features = consonant_list[consonant_axes[1]]
@@ -168,29 +178,107 @@ def phonemeDistance(phoneme1,phoneme2):
 
 def alignWords(word1, word2):
     # This function takes two strings and alings them using the basic idea of
-    # the Needleman Wunst algorithm.
-    word1 = flattenWord(splitWord(word1))
-    word2 = flattenWord(splitWord(word2))
+    # the Needleman Wunst algorithm. The direction matrix has the following
+    # standard to denote the direction of procedence:
+    #   0: It comes from nowhere. Only the origin should have this.
+    #   1: From above
+    #   2: From left
+    #   3: From diagonal
+    #
+    # NOTE: This method should be improved by providing all the possible optimal
+    #       alignments when there is more than one, to meassure later the
+    #       distances of all the alignments and choose the minimal.
+    #
+    word1 = splitWord(word1)
+    word2 = splitWord(word2)
     K = len(word1)
     N = len(word2)
     alignmentMatrix = np.empty((K+1,N+1))
+    directionMatrix = np.empty((K+1,N+1))
     alignmentMatrix[:] = np.NaN
     alignmentMatrix[:,0] = 0
     alignmentMatrix[0,:] = 0
-    return alignmentMatrix
+    directionMatrix[:] = np.NaN
+    directionMatrix[:,0] = 1
+    directionMatrix[0,:] = 2
+    directionMatrix[0,0] = 0
+    # This part of the code constructs the value and direction matrices.
+    for k in range(K):
+        phoneme1 = word1[k]
+        for n in range(N):
+            phoneme2 = word2[n]
+            d = phonemeDistance(phoneme1,phoneme2)
+            upwards   = alignmentMatrix[k,n+1]
+            leftwards = alignmentMatrix[k+1,n]
+            diagwards = alignmentMatrix[k,n] + 1 - d
+            D = max(upwards,leftwards,diagwards)
+            alignmentMatrix[k+1,n+1] = D
+            if D == diagwards:
+                directionMatrix[k+1, n+1] = 3
+            elif D == leftwards:
+                directionMatrix[k+1, n+1] = 2
+            else:
+                directionMatrix[k+1, n+1] = 1
+    k = K
+    n = N
+    alignedWord1 = []
+    alignedWord2 = []
+    # This part of the code reconstructs the alignment from the directionMatrix.
+#    while k > 0 and n > 0:
+    while k + n > 0:
+        dir = directionMatrix[k,n]
+        if dir == 3:
+            alignedWord1.append(word1[k-1])
+            alignedWord2.append(word2[n-1])
+            k -= 1
+            n -= 1
+        elif dir == 1:
+            alignedWord1.append(word1[k-1])
+            alignedWord2.append(' ')
+            k -= 1
+        elif dir == 2:
+            alignedWord2.append(word2[n-1])
+            alignedWord1.append(' ')
+            n -= 1
+    alignedWord1.reverse()
+    alignedWord2.reverse()
+#    return [alignmentMatrix, directionMatrix]
+    return alignedWord1, alignedWord2
 
-def checkShit():
-    langs = list(chibchan_swadesh_lists.keys())
-    for x in langs:
-        listota = chibchan_swadesh_lists[x]
-        swadi = list(listota.keys())
-        for y in swadi:
-            splitWord(listota[y])
-    pass
+def wordDistance(word1,word2):
+    # This function assumes that the arguments are words already aligned and
+    # thus, they have the same length. It computes the average distance of the
+    # characters.
+    L = [phonemeDistance(word1[k],word2[k]) for k in range(len(word1))]
+    return sum(L)/len(L)
 
+def languageDistance(language1,language2):
+    common_lexicon = [word for word in list(language1.keys())
+                            if word in list(language2.keys())]
+    distances = []
+    for word in common_lexicon:
+        # pdb.set_trace()
+        word1 = splitWord(language1[word])
+        word2 = splitWord(language2[word])
+        word1, word2 = alignWords(word1,word2)
+        d = wordDistance(word1,word2)
+        distances.append(d)
+    return sum(distances)/len(distances)
 
-
-
+def languageMatrix():
+    # This function takes the list of languages and computes the matrix of one
+    # to one distances. As we are looking for the lowest
+    language_list = list(chibchan_swadesh_lists.keys())
+    K = len(language_list)
+    language_matrix = np.zeros([K,K])
+    np.fill_diagonal(language_matrix,1)
+    for k in range(K):
+        for n in range(k):
+            d = languageDistance(chibchan_swadesh_lists[language_list[k]],
+                                 chibchan_swadesh_lists[language_list[n]],)
+            language_matrix[n,k] = d
+            language_matrix[k,n] = d
+    return language_matrix
 
 def splitWord(word):
     # This function receives a word, that is, a string containing the X-SAMPA
@@ -202,85 +290,9 @@ def splitWord(word):
     k = 0
     while k < n:
         char = word[k]
-        if char in SINGLE_CHAR:
+        if char == '_':
+            k += 1
+        elif char in VOCALS or char in CONSONANTS:
             phonemes.append(char)
-            if char in GUAREVER:
-                GUAREVER.remove(char)
-        elif char in MULTIPLE_CHAR:
-            if k < n-1:
-                char2 = word[k+1]
-                if char == 'p' and char2 == '\\':
-                    k += 1
-                    phonemes.append(char + char2)
-                    #DELETE LATER
-                    if char+char2 in GUAREVER:
-                        GUAREVER.remove(char+char2)
-
-                elif char == 'p':
-                    phonemes.append(char)
-
-                    #DELETE LATER
-                    if char in GUAREVER:
-                        GUAREVER.remove(char)
-
-                elif char == 'd' and char2 == 'Z':
-                    k += 1
-                    phonemes.append(char + char2)
-
-                    #DELETE LATER
-                    if char+char2 in GUAREVER:
-                        GUAREVER.remove(char+char2)
-
-                elif char == 'd':
-                    phonemes.append(char)
-
-                    #DELETE LATER
-                    if char in GUAREVER:
-                        GUAREVER.remove(char)
-
-                elif char == 't' and (char2 == 's' or char2 == 'S'):
-                    k += 1
-                    phonemes.append(char + char2)
-
-                    #DELETE LATER
-                    if char+char2 in GUAREVER:
-                        GUAREVER.remove(char+char2)
-
-                elif char == 't':
-                    phonemes.append(char)
-
-                    #DELETE LATER
-                    if char in GUAREVER:
-                        GUAREVER.remove(char)
-
-                elif char in DIACRITC_CHAR:
-                    if char2 == 'H' or char2 == 'L' or char2 == '/' or char2 == '\"':
-                        k += 1
-                        phonemes.append(char + char2)
-
-                        #DELETE LATER
-                        if char+char2 in GUAREVER:
-                            GUAREVER.remove(char+char2)
-
-                    else:
-                        print(char)
-                        # print('\n')
-
-                else:
-                    print(char)
-                    # print('\n')
-            else:
-                phonemes.append(char)
-        elif char == 'ñ':
-            phonemes.append('J')
-        else:
-            # print(char)
-            if char not in UNINCLUDED:
-                UNINCLUDED.append(char)
         k += 1
     return phonemes
-
-def flattenWord(word):
-    # This function returns the list of characters without accents, tones or
-    # suprasegmentals.
-    return [char for char in word if char in VOCALS or char in CONSONANTS]
