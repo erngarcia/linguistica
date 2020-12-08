@@ -42,34 +42,12 @@ import pandas as pd
 import numpy as np
 import math
 
-import pdb
-
 
 VOCALS = ['i', '1', 'u', 'I', 'U', 'e', '7', 'o', 'a', 'O']
-# VOCALS = ['i', 'M', 'u', 'I', 'U', 'e', '7', 'o', 'a', 'O', '1']
 
 CONSONANTS = ['p', 'b', 't', 'd', 'k', 'g', '?', 'F', 'B', 's',
               'z', 'K', 'S', 'Z', 'x', 'G', 'h', 'T', 'C', 'J',
               'm', 'n', 'ñ', 'N', 'r', 'R', 'l', 'L']
-
-# CONSONANTS = ['p', 'b', 't', 'd', 'k', 'g', '?', 'p\\', 'B', 's', 'z', 'K', 'S',
-#               'Z', 'x', 'G', 'h', 'ts',	'tS', 'dZ', 'm', 'n', 'J', 'N', '4',
-#               'r', 'l', 'L']
-
-
-SINGLE_CHAR = ['i', 'M', 'u', 'I', 'U', 'e', '7', 'o', 'a', 'O', '1', 'b', 'k',
-               'g', '?', 'B', 's', 'z', 'K', 'S', 'Z', 'x', 'G', 'h', 'm', 'n',
-               'J', 'N', '4', 'r', 'l', 'L', '~', ':']
-
-MULTIPLE_CHAR = ['p','t', 'd', '_']
-
-DIACRITC_CHAR = ['~',':','\"','_']
-
-UNINCLUDED = []
-
-GUAREVER = VOCALS + CONSONANTS
-
-
 
 
 def prepareLists():
@@ -224,7 +202,6 @@ def alignWords(word1, word2):
     alignedWord1 = []
     alignedWord2 = []
     # This part of the code reconstructs the alignment from the directionMatrix.
-#    while k > 0 and n > 0:
     while k + n > 0:
         dir = directionMatrix[k,n]
         if dir == 3:
@@ -242,8 +219,8 @@ def alignWords(word1, word2):
             n -= 1
     alignedWord1.reverse()
     alignedWord2.reverse()
-#    return [alignmentMatrix, directionMatrix]
     return alignedWord1, alignedWord2
+
 
 def wordDistance(word1,word2):
     # This function assumes that the arguments are words already aligned and
@@ -252,12 +229,12 @@ def wordDistance(word1,word2):
     L = [phonemeDistance(word1[k],word2[k]) for k in range(len(word1))]
     return sum(L)/len(L)
 
+
 def languageDistance(language1,language2):
     common_lexicon = [word for word in list(language1.keys())
                             if word in list(language2.keys())]
     distances = []
     for word in common_lexicon:
-        # pdb.set_trace()
         word1 = splitWord(language1[word])
         word2 = splitWord(language2[word])
         word1, word2 = alignWords(word1,word2)
@@ -279,6 +256,40 @@ def languageMatrix():
             language_matrix[n,k] = d
             language_matrix[k,n] = d
     return language_matrix
+
+
+def branchingStep(matrix,nodes):
+    # This function makes a single step on the branching of the phylogenetic
+    # tree. It assumes that nodes is an array 1xN, and that matrix is an numpy
+    # array NxN, with N > 1. It also assume that matrix is a matrix of distances
+    # symmetric and with values 1 in the diagonal, and values less than 1 in all
+    # other entries.
+    N = len(nodes)
+    new_matrix = np.zeros((N-1,N-1))
+    min_distance = np.min(matrix)
+    W = np.where(matrix == min_distance)
+    x = W[0][0]
+    y = W[1][0]
+    temp_matrix = np.delete(matrix,[x,y],0)
+    temp_matrix = np.delete(temp_matrix,[x,y],1)
+    new_matrix[0:N-2,0:N-2] = temp_matrix
+    new_matrix[N-2,N-2] = 1
+    check_array = np.delete(matrix[[x,y],:].min(axis = 0),[x,y],0)
+    new_matrix[N-2,0:N-2] = check_array
+    new_matrix[0:N-2,N-2] = check_array
+    new_pair = [nodes[x],nodes[y]]
+    new_nodes = [x for x in nodes if x not in new_pair]
+    new_nodes.append(new_pair)
+    return new_matrix, new_nodes
+
+def fullBranching():
+    # This is the cental method of the file. It computes the binary tree
+    matrix = languageMatrix()
+    nodes = list(chibchan_swadesh_lists.keys())
+    while len(nodes) > 1:
+        matrix,nodes = branchingStep(matrix,nodes)
+    return nodes
+
 
 def splitWord(word):
     # This function receives a word, that is, a string containing the X-SAMPA
