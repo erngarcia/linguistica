@@ -2,9 +2,13 @@
 
 # Run the following
 from chibcha import *
-M = languageMatrix()
-language_list = list(chibchan_swadesh_lists.keys())
-nM, nN = branchingStep(M,language_list)
+T = fullBranching()
+
+# M = languageMatrix()
+# language_list = list(chibchan_swadesh_lists.keys())
+# nM, nN = branchingStep(M,language_list)
+
+T = fullBranching()
 
 
 # df_listas = read_excel("../../Resources/ListasSwadesh.xlsx", sheet_name="Hoja1")

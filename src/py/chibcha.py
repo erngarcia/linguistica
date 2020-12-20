@@ -53,7 +53,7 @@ CONSONANTS = ['p', 'b', 't', 'd', 'k', 'g', '?', 'F', 'B', 's',
 def prepareLists():
     # This function reads the Swadesh List file and converts it to a big
     # dictionary object.
-    listsSw = pd.read_excel("../../res/listasswadesh.xlsx", sheet_name="Hoja1")
+    listsSw = pd.read_excel("../../res/listasswadesh.xlsx", sheet_name="Hoja2")
     axes = list(listsSw.axes[1])
     listasSwadesh = listsSw.to_dict()
     spanish = listasSwadesh[axes[1]]
