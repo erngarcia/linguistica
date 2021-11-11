@@ -42,8 +42,10 @@ import pandas as pd
 import numpy as np
 import math
 
-
-VOCALS = ['i', '1', 'u', 'I', 'U', 'e', '7', 'o', 'a', 'O']
+#adding long vowels and nasalized vowels
+VOCALS = ['i', '1', 'u', 'I', 'U', 'e', '7', 'o', 'a', 'O','i~', '1~',
+ 'u~', 'I~', 'U~', 'e~', '7~', 'o~', 'a~', 'i:',
+  '1:', 'u:', 'I:', 'U:', 'e:', '7:', 'o:', 'a:' ]
 
 CONSONANTS = ['p', 'b', 't', 'd', 'k', 'g', '?', 'F', 'B', 's',
               'z', 'K', 'S', 'Z', 'x', 'G', 'h', 'T', 'C', 'J',
@@ -73,6 +75,11 @@ def prepareLists():
         k += 1
     return chibchan_lists
 
+
+#adding condition for special diagraphs in the main while loop.
+# TODO: if condition to be excecuted with logic added by @david please check this out to implement.
+# if phoneme[1] == ':'  -> means long phoneme
+# if phoneme[1] == '~'  -> means nasal.
 
 
 def prepareFeatures():
